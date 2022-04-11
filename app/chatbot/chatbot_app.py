@@ -12,6 +12,10 @@ from tkinter import *
 import spacy
 from spacy import displacy
 
+#Wikipedia API integration
+import wikipediaapi
+wiki_wiki = wikipediaapi.Wikipedia('en')
+
 
 # load the trained model and pickle files
 intents = json.loads(open('app/chatbot/data/intents.json').read())
@@ -101,7 +105,34 @@ def getResponse(predicted_classes, intents_json):
         if(i['tag']== tag):
             result = random.choice(i['responses'])
             break
-    return result
+    
+   #Wikipedia API integration. Give definition of possible mental health disorders. 
+   #Searches wikipedia based on tag iff tag is a mental health disorder
+    if tag == 'major_depression' or tag == 'anxiety' or tag == 'positive disorganization' :
+       
+        wikiTag = ''
+
+        #form wikiTag
+        if tag == 'major_depression':
+            wikiTag = "depression"
+        elif tag == 'anxiety':
+            wikiTag = "anxiety"
+        elif tag == 'positive disorganization':
+            wikiTag += "schizophrenia"
+
+        #Retrieve subject 
+        page_py = wiki_wiki.page(wikiTag)
+
+        #create string for returning 
+        str = "\n\nHere is a summary and link:\n" + page_py.summary[0:120] + "\n" + page_py.fullurl
+
+        #return what the chatbot will say plus wikipedia information
+        return result + str
+    
+    else:
+        #otherwise, return default conversation
+        return result
+
 
 # function that returns a chatbot response given an input sentence
 def chatbot_response(text):
