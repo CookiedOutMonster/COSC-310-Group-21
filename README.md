@@ -64,15 +64,14 @@ To use the chatbot you can run the file `app/chatbot/chatbot_app.py`
 
 #### Google Translate API integration
 
-Now the chatbot can communicate in over 100+ different languages using Google Translate. More documentation plus a list of supported languages can be found here 
+Now the chatbot can communicate in over 100+ different languages using Google Translate. More documentation plus a list of supported languages can be found at the link below. Chatbot will automatically detect which language is being inputted and respond in that language. 
 
 <img src="https://github.com/RainingPixels/COSC-310-Group-21/blob/main/1.png">
 
 https://cloud.google.com/translate
 
 ### Wikipedia API integration
-
-Now when the chatbot suggests a potential diagnosis, it will give a summary about the disorder from wikipedia as well with a link so the client can find out more about thier potential diagnosis. 
+Now when the chatbot suggests a potential diagnosis, it will give a summary of the disorder from Wikipedia as well as a link so the client can find out more about their potential diagnosis. This is dependant on the Wikipedia API and all the required setup is install the dependencies above.  
 
 <img src="https://github.com/RainingPixels/COSC-310-Group-21/blob/main/2.png">
 
