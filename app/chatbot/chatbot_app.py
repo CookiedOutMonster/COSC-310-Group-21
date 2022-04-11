@@ -9,12 +9,19 @@ import json
 import random
 import tkinter                                  # used to build user interface
 from tkinter import *
+from regex import F
 import spacy
 from spacy import displacy
+
+
+#Google Translate API 
+from googletrans import Translator
+translator = Translator()
 
 #Wikipedia API integration
 import wikipediaapi
 wiki_wiki = wikipediaapi.Wikipedia('en')
+
 
 
 # load the trained model and pickle files
@@ -134,11 +141,39 @@ def getResponse(predicted_classes, intents_json):
         return result
 
 
+#function that returns which language the inputted sentence is in 
+def which_language(text):
+    translated = translator.translate(text)
+    return translated.src
+
 # function that returns a chatbot response given an input sentence
 def chatbot_response(text):
-    predicted_classes = predict_class(text, model)
-    res = getResponse(predicted_classes, intents)
-    return res
+
+    #Google translate API integration
+    if which_language(text) != 'en':
+        translated = translator.translate(text)
+        translated_sentence = translated.text
+        translated_language = translated.src
+
+        predicted_classes = predict_class(translated_sentence, model)
+        #res = getResponse(predicted_classes, intents)
+        res = getResponse(predicted_classes, intents)
+        
+        translated_result = translator.translate(res, dest=translated_language)
+        #print(translated_result.text)
+        return translated_result.text
+        
+    else:   #language is in english
+        predicted_classes = predict_class(text, model)
+        #res = getResponse(predicted_classes, intents)
+        res = getResponse(predicted_classes, intents)
+        return res
+
+
+        
+
+
+  
 
 # function that acts as a send button for the user interface
 def send():
@@ -164,7 +199,7 @@ base.geometry("400x500")
 base.resizable(width=FALSE, height=FALSE)
 
 # create chatbot window
-ChatLog = Text(base, bd=0, bg="white", height="8", width="50", font="Arial",)
+ChatLog = Text(base, bd=0, bg="grey", height="8", width="50", font="Arial",)
 ChatLog.config(state=DISABLED)
 
 # bind scrollbar to Chat window
@@ -175,7 +210,7 @@ ChatLog['yscrollcommand'] = scrollbar.set
 SendButton = Button(base, font=("Arial",14,'bold'), text="Send", width="12", height=5, bd=0, bg="#fe6f5e", activebackground="#3c9d9b",fg='#ffffff', command=send)
 
 # create the box to enter message
-EntryBox = Text(base, bd=0, bg="white",width="29", height="5", font="Arial")
+EntryBox = Text(base, bd=0, bg="grey",width="29", height="5", font="Arial")
 EntryBox.bind("<Return>", send)
 
 # place all the components on the screen
