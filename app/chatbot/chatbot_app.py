@@ -105,23 +105,27 @@ def getResponse(predicted_classes, intents_json):
         if(i['tag']== tag):
             result = random.choice(i['responses'])
             break
-
-
+    
    #Wikipedia API integration. Give definition of possible mental health disorders. 
    #Searches wikipedia based on tag iff tag is a mental health disorder
     #if tag == 'major_depression' | tag == 'anxiety' | tag == 'positive disorganization':
-    if tag == 'major_depression':
-        #Positive disorginaziton == schitzophrenia
+    if tag == 'major_depression' or tag == 'anxiety' or tag == 'positive disorganization' :
+       
+        wikiTag = ''
 
+        #form wikiTag
         if tag == 'major_depression':
             wikiTag = "depression"
         elif tag == 'anxiety':
             wikiTag = "anxiety"
         elif tag == 'positive disorganization':
-            wikiTag == "schitzophrenia"
+            wikiTag += "schizophrenia"
 
-        page_py = wiki_wiki.page(wikiTag)
-        print("Page - Title: %s" % page_py.title)
+        
+        print("This is wikiTag " + wikiTag)
+
+        #page_py = wiki_wiki.page(wikiTag)
+        #print("Page - Summary: %s" % page_py.summary[0:60])
    
     return result
 
