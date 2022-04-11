@@ -108,7 +108,6 @@ def getResponse(predicted_classes, intents_json):
     
    #Wikipedia API integration. Give definition of possible mental health disorders. 
    #Searches wikipedia based on tag iff tag is a mental health disorder
-    #if tag == 'major_depression' | tag == 'anxiety' | tag == 'positive disorganization':
     if tag == 'major_depression' or tag == 'anxiety' or tag == 'positive disorganization' :
        
         wikiTag = ''
@@ -121,13 +120,19 @@ def getResponse(predicted_classes, intents_json):
         elif tag == 'positive disorganization':
             wikiTag += "schizophrenia"
 
-        
-        print("This is wikiTag " + wikiTag)
+        #Retrieve subject 
+        page_py = wiki_wiki.page(wikiTag)
 
-        #page_py = wiki_wiki.page(wikiTag)
-        #print("Page - Summary: %s" % page_py.summary[0:60])
-   
-    return result
+        #create string for returning 
+        str = "\n\nHere is a summary and link:\n" + page_py.summary[0:120] + "\n" + page_py.fullurl
+
+        #return what the chatbot will say plus wikipedia information
+        return result + str
+    
+    else:
+        #otherwise, return default conversation
+        return result
+
 
 # function that returns a chatbot response given an input sentence
 def chatbot_response(text):
